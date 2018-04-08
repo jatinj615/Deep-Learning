@@ -48,15 +48,15 @@ from keras.layers import Dropout
 clf = Sequential()
 
 # Adding the input layer and the first hidden layer
-clf.add(Dense(output_dim = 6, init = 'uniform', activation='relu', input_dim = 11))
+clf.add(Dense(output_dim = 6, kernel_initializer = 'uniform', activation='relu', input_dim = 11))
 clf.add(Dropout(rate=0.1))
 
 # Adding Second Hidden layer
-clf.add(Dense(output_dim = 6, init = 'uniform', activation='relu'))
+clf.add(Dense(output_dim = 6, kernel_initializer = 'uniform', activation='relu'))
 clf.add(Dropout(rate=0.1))
 
 # Adding Output layer
-clf.add(Dense(output_dim = 1, init = 'uniform', activation='sigmoid')) #use suftmax function in more than two categories
+clf.add(Dense(output_dim = 1, kernel_initializer = 'uniform', activation='sigmoid')) #use suftmax function in more than two categories
 
 # Compiling ANN
 clf.compile(optimizer= 'adam', loss='binary_crossentropy', metrics = ['accuracy']) # In case of more than two categories loss function equals 'categorical_crossentropy'
@@ -72,6 +72,8 @@ y_pred = (y_pred > 0.5)
 from sklearn.metrics import confusion_matrix
 cm = confusion_matrix(y_test, y_pred)
 
+from sklearn.metrics import accuracy_score
+acc = accuracy_score(y_test, y_pred)
 """Use our ANN model to predict if the customer with the following informations will leave the bank: 
 
 Geography: France
@@ -95,9 +97,9 @@ from sklearn.model_selection import cross_val_score
 
 def build_clf():
     clf = Sequential()
-    clf.add(Dense(output_dim = 6, init = 'uniform', activation='relu', input_dim = 11))
-    clf.add(Dense(output_dim = 6, init = 'uniform', activation='relu'))
-    clf.add(Dense(output_dim = 1, init = 'uniform', activation='sigmoid')) #use suftmax function in more than two categories
+    clf.add(Dense(output_dim = 6, kernel_initializer = 'uniform', activation='relu', input_dim = 11))
+    clf.add(Dense(output_dim = 6, kernel_initializer = 'uniform', activation='relu'))
+    clf.add(Dense(output_dim = 1, kernel_initializer = 'uniform', activation='sigmoid')) #use suftmax function in more than two categories
     clf.compile(optimizer= 'adam', loss='binary_crossentropy', metrics = ['accuracy']) # In case of more than two categories loss function equals 'categorical_crossentropy'
     return clf
 
@@ -115,9 +117,9 @@ from sklearn.model_selection import GridSearchCV
 
 def build_clf(optimizer):
     clf = Sequential()
-    clf.add(Dense(output_dim = 6, init = 'uniform', activation='relu', input_dim = 11))
-    clf.add(Dense(output_dim = 6, init = 'uniform', activation='relu'))
-    clf.add(Dense(output_dim = 1, init = 'uniform', activation='sigmoid')) #use suftmax function in more than two categories
+    clf.add(Dense(output_dim = 6, kernel_initializer = 'uniform', activation='relu', input_dim = 11))
+    clf.add(Dense(output_dim = 6, kernel_initializer = 'uniform', activation='relu'))
+    clf.add(Dense(output_dim = 1, kernel_initializer = 'uniform', activation='sigmoid')) #use suftmax function in more than two categories
     clf.compile(optimizer= optimizer, loss='binary_crossentropy', metrics = ['accuracy']) # In case of more than two categories loss function equals 'categorical_crossentropy'
     return clf
 
