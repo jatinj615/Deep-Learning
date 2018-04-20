@@ -7,6 +7,7 @@
 #Install Keras
 
 #Inporting Libraries
+import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -61,7 +62,25 @@ clf.add(Dense(output_dim = 1, kernel_initializer = 'uniform', activation='sigmoi
 clf.compile(optimizer= 'adam', loss='binary_crossentropy', metrics = ['accuracy']) # In case of more than two categories loss function equals 'categorical_crossentropy'
 
 # Fitting ANN to Training Set
-clf.fit(X_train, y_train, batch_size=10, epochs=100)
+with tf.device('/gpu:0'):
+    clf.fit(X_train, y_train, batch_size=10, epochs=100)
+
+from keras.models import model_from_json
+model_json = clf.to_json()
+with open("model.json", "w") as json_file:
+    json_file.write(model_json)
+# serialize weights to HDF5
+clf.save_weights("model.h5")
+
+#load model
+json_file = open('model.json', 'r')
+loaded_model_json = json_file.read()
+json_file.close()
+loaded_model = model_from_json(loaded_model_json)
+# load weights into new model
+loaded_model.load_weights("model.h5")
+loaded_model.compile(optimizer= 'adam', loss='binary_crossentropy', metrics = ['accuracy']) # In case of more than two categories loss function equals 'categorical_crossentropy'
+
 
 #predict the test set result
 y_pred = clf.predict(X_test)
