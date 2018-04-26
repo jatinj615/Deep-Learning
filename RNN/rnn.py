@@ -41,6 +41,15 @@ regressor.compile(optimizer='adam', loss='mean_squared_error')
 # Fitting the RNN
 regressor.fit(X_train, y_train, batch_size=32, epochs = 300)
 
+#saving model
+
+from keras.models import model_from_json
+model_json = regressor.to_json()
+with open("model.json", "w") as json_file:
+    json_file.write(model_json)
+# serialize weights to HDF5
+regressor.save_weights("model.h5")
+
 
 # Visualising 
 # Test Data
@@ -65,7 +74,26 @@ plt.ylabel('Google Stock Price')
 plt.legend()
 plt.show()
 
+# getting real google data
+real_stock_price_train = pd.read_csv('Google_Stock_Price_Train.csv')
+real_stock_price_train = np.array(real_stock_price_train.iloc[:, 1:2].values)
 
+# predict stock price
+predicted = regressor.predict(X_train)
 
+predicted = scaler.inverse_transform(predicted)
 
+# Visualize
+plt.figure(figsize=(10,8))
+plt.plot(real_stock_price_train, color='red', label= 'Real Google Stock Price')
+plt.plot(predicted, color='blue' , label='Predicted Google Stock Price')
+plt.title('Google Stock Price Prediction')
+plt.xlabel('Time')
+plt.ylabel('Google Stock Price')
+plt.legend()
 
+# Evaluating RNN
+import math
+from sklearn.metrics import mean_squared_error
+rmse = math.sqrt(mean_squared_error(real_stock_price, y_pred))
+percent = rmse/800
