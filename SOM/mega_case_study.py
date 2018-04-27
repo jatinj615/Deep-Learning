@@ -43,7 +43,7 @@ show()
 
 # Finding the frauds
 mappings = som.win_map(X)
-frauds = np.concatenate((mappings[(5, 1)], mappings[(1, 5)]))
+frauds = np.concatenate((mappings[(5, 1)], mappings[(1, 5)]), axis = 0)
 frauds = scaler.inverse_transform(frauds)
 
 # Going from unsupervised to supervised
@@ -88,6 +88,7 @@ clf.compile(optimizer= 'adam', loss='binary_crossentropy', metrics = ['accuracy'
 # Fitting ANN to Training Set
 clf.fit(customers, is_fraud, batch_size=1, epochs=3)
 
-y_pred = clf.predict(X_test)
+y_pred = clf.predict(customers)
 
-
+y_pred = np.concatenate((dataset.iloc[:, 0:1].values, y_pred), axis = 1)
+y_pred = y_pred[y_pred[:, 1].argsort()]
